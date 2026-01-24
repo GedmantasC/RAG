@@ -1,4 +1,7 @@
-
+'''
+Here is a code example on how to get vector similarity between different piece of text, like "Hi", "car", "tourist", "hello" and "vehicle."
+The smaller number is the more words are similar one to other
+'''
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
@@ -21,7 +24,7 @@ def get_embedding(text, model="text-embedding-ada-002"):
   return rsp.data[0].embedding
 
 # Create a list of texts
-texts = ["Hi", "car", "tourist", "hello", "vehicle"]
+texts = ["Hi", "car", "tourist", "HI", "vehicle"]
 # Generate embeddings for the texts
 embeddings = [get_embedding(text) for text in texts]
 
