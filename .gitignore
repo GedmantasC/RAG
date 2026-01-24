@@ -1,0 +1,16 @@
+# Secrets (never commit)
+.streamlit/secrets.toml
+secrets.toml
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Mac / Windows junk
+.DS_Store
+Thumbs.db
