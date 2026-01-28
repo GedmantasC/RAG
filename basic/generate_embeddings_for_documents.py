@@ -5,7 +5,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import bs4
-
+import numpy as np
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -36,7 +38,7 @@ dog_embedding = client.embeddings.create(
 If we print more coordinates of the words, similar words like car and bus, would have close coordinates.'''
 print(car_embedding.data[0].embedding[:10])
 
-
+#-------------------------------------------------------------
 
 # Step 1: Load the raw data or documents
 #here we prepare to load the web page, without ads, bars etc.
@@ -75,3 +77,38 @@ query_embedding = vector_store.similarity_search(query, k=3)
 print("Relevant Chunks:")
 for result in query_embedding:
     print(result.page_content)
+
+
+#------------------------------------------------------------------------
+'''In this part we plot vectors in 2D. To reduce demention PCA is used. This allows us to understand how far or close words are'''
+
+
+# Example embeddings (replace these with actual embeddings from OpenAI API)
+car_vector = car_embedding.data[0].embedding
+bus_vector = bus_embedding.data[0].embedding
+sky_vector = sky_embedding.data[0].embedding
+dog_vector = dog_embedding.data[0].embedding
+
+# Step 1: Combine vectors into a single array
+vectors = np.array([car_vector, bus_vector, sky_vector, dog_vector])
+labels = ["car", "bus", "sky", "dog"]
+
+# Step 2: Reduce dimensionality using PCA
+pca = PCA(n_components=2)  # Reduce to 2D for visualization
+reduced_vectors = pca.fit_transform(vectors)
+
+# Step 3: Plot the reduced vectors in 2D
+plt.figure(figsize=(8, 6))
+for i, (x, y) in enumerate(reduced_vectors):
+    plt.scatter(x, y, label=labels[i], alpha=0.8, edgecolors='k')
+
+# Annotate the points
+for i, (x, y) in enumerate(reduced_vectors):
+    plt.text(x + 0.01, y + 0.01, labels[i], fontsize=10)
+
+plt.title("2D Visualization of Word Embeddings")
+plt.xlabel("PCA Dimension 1")
+plt.ylabel("PCA Dimension 2")
+plt.legend()
+plt.grid()
+plt.show()
