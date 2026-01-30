@@ -72,3 +72,46 @@ similarity=text_vectorizer.compare_vectors(v1, v2)  # high similarity
 
 print(embedding[:10])
 print(similarity)
+
+
+
+
+# Function to save embeddings to a SQLite database
+def save_embeddings_to_db(embeddings, db_path="embeddings.db"):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Create table if it doesn't exist
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS embeddings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            text TEXT,
+            embedding BLOB
+        )
+    ''')
+
+    for text, embedding in embeddings.items():
+        # Convert the NumPy array to a bytes object
+        embedding_bytes = embedding.tobytes()
+        cursor.execute("INSERT INTO embeddings (text, embedding) VALUES (?, ?)", (text, embedding_bytes))
+
+    conn.commit()
+    conn.close()
+
+# Example usage:
+# Load API key
+client = OpenAI(api_key=secrets["OPENAI_API_KEY"])
+vectorizer = TextVectorizer(api_key=secrets["OPENAI_API_KEY"])
+
+# Sample text and embeddings (replace with your actual data)
+texts = [
+    "The food was delicious and the waiter...",
+    "The movie was amazing, the acting was superb.",
+    "I had a terrible experience at the hotel."
+]
+embeddings_dict = {}
+for text in texts:
+  embeddings_dict[text] = vectorizer.vectorize(text)
+
+# Save embeddings to the database
+save_embeddings_to_db(embeddings_dict)
