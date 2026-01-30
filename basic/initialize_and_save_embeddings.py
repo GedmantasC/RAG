@@ -4,6 +4,7 @@ from openai import OpenAI
 import toml
 
 class TextVectorizer:
+    '''In general all functions combined allows to vectorize text and latter to compare the similarity of the vectors accordingly'''
     def __init__(self, api_key=None):
         """
         Initialize the vectorizer with OpenAI API credentials.
@@ -63,4 +64,11 @@ text_vectorizer = TextVectorizer(api_key=secrets["OPENAI_API_KEY"])
 
 embedding = text_vectorizer.vectorize("The food was delicious and the waiter...")
 
+#here the similarity between sentences are calculated. The closer the score is to 1 the more similar senetences are
+v1 = text_vectorizer.vectorize("The food was amazing")
+v2 = text_vectorizer.vectorize("The meal was delicious")
+
+similarity=text_vectorizer.compare_vectors(v1, v2)  # high similarity
+
 print(embedding[:10])
+print(similarity)
