@@ -46,6 +46,28 @@ class TextVectorizer:
         except Exception as e:
             print(f"Error during vectorization: {e}")
             return None
+        
+        # Function to save embeddings to a SQLite database
+    def save_embeddings_to_db(self, embeddings, db_path="embeddings.db"):
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # Create table if it doesn't exist
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS embeddings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                text TEXT,
+                embedding BLOB
+            )
+        ''')
+
+        for text, embedding in embeddings.items():
+            # Convert the NumPy array to a bytes object
+            embedding_bytes = embedding.tobytes()
+            cursor.execute("INSERT INTO embeddings (text, embedding) VALUES (?, ?)", (text, embedding_bytes))
+
+        conn.commit()
+        conn.close()
 
 
 '''Each document contains:
@@ -78,17 +100,6 @@ resp = client.embeddings.create(
 '''Idea is that we have a list of historical people and some text about each of them. By making embedings of the text, we plot similarity between them. We can see who are similar to whom'''
 X = np.array([e.embedding for e in resp.data])
 
-X_2d = TSNE(n_components=2, random_state=41, n_jobs=1, init='random').fit_transform(X)
-
-# plt.figure(figsize=(10, 7))
-# plt.scatter(X_2d[:, 0], X_2d[:, 1], s=30)
-
-texts_obj = [plt.text(x, y, label, fontsize=9) for x, y, label in zip(X_2d[:, 0], X_2d[:, 1], names)]
-adjust_text(texts_obj, force_text=(0,0.1))
-
-# plt.title("t-SNE of text-embedding-3-small embeddings")
-# plt.show()
-
 file_id = '1WjGorxTd2ywiFg8VXyfjTPa871pWnkrd'
 url = f'https://drive.google.com/uc?export=download&id={file_id}'
 response = requests.get(url)
@@ -100,28 +111,15 @@ print(f"  - Hard: {len([q for q in QUERIES if q['difficulty'] == 'hard'])}\n\n")
 
 for k,v in QUERIES[0].items(): print(k, ':', v)
 
-# Function to save embeddings to a SQLite database
-def save_embeddings_to_db(embeddings, db_path="embeddings.db"):
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
 
-    # Create table if it doesn't exist
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS embeddings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            text TEXT,
-            embedding BLOB
-        )
-    ''')
-
-    for text, embedding in embeddings.items():
-        # Convert the NumPy array to a bytes object
-        embedding_bytes = embedding.tobytes()
-        cursor.execute("INSERT INTO embeddings (text, embedding) VALUES (?, ?)", (text, embedding_bytes))
-
-    conn.commit()
-    conn.close()
-
+text_vectorizer = TextVectorizer(api_key=secrets["OPENAI_API_KEY"])
+#make embedings from the text. Changed that id would be name of the person, not the all text
 embeddings_dict = {}
-for text in texts:
-  embeddings_dict[text] = vectorizer.vectorize(text)
+for name, text in zip(names, texts):
+    embeddings_dict[name] = text_vectorizer.vectorize(text)
+
+  
+
+print(embeddings_dict)
+
+text_vectorizer.save_embeddings_to_db(embeddings_dict)
