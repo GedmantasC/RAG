@@ -72,7 +72,7 @@ similarity=text_vectorizer.compare_vectors(v1, v2)  # high similarity
 
 print(embedding[:10])
 print(similarity)
-
+#--------------
 
 
 
@@ -115,3 +115,30 @@ for text in texts:
 
 # Save embeddings to the database
 save_embeddings_to_db(embeddings_dict)
+#-----------------------------
+
+def read_embeddings_from_db(db_path="embeddings.db"):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT text, embedding FROM embeddings")
+    rows = cursor.fetchall()
+
+    embeddings = {}
+    for row in rows:
+        text = row[0]
+        # Convert the bytes object back to a NumPy array
+        embedding_bytes = row[1]
+        embedding = np.frombuffer(embedding_bytes, dtype=np.float32)  # Assuming float32
+        embeddings[text] = embedding
+
+    conn.close()
+    return embeddings
+
+# Example usage:
+retrieved_embeddings = read_embeddings_from_db()
+print(retrieved_embeddings)
+
+for text, embedding in retrieved_embeddings.items():
+    print(f"Text: {text}")
+    print(f"Embedding: {embedding}")
