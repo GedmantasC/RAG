@@ -37,6 +37,7 @@ resp = client.embeddings.create(
     model="text-embedding-3-small",
     input=texts,
 )
+'''Idea is that we have a list of historical people and some text about each of them. By making embedings of the text, we plot similarity between them. We can see who are similar to whom'''
 X = np.array([e.embedding for e in resp.data])
 
 X_2d = TSNE(n_components=2, random_state=41, n_jobs=1, init='random').fit_transform(X)
@@ -49,3 +50,4 @@ adjust_text(texts_obj, force_text=(0,0.1))
 
 plt.title("t-SNE of text-embedding-3-small embeddings")
 plt.show()
+
