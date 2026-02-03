@@ -103,7 +103,7 @@ def save_embeddings_to_db(embeddings, db_path="embeddings.db"):
 client = OpenAI(api_key=secrets["OPENAI_API_KEY"])
 vectorizer = TextVectorizer(api_key=secrets["OPENAI_API_KEY"])
 
-# Sample text and embeddings (replace with your actual data)
+#Sample text and embeddings (replace with your actual data)
 texts = [
     "The food was delicious and the waiter...",
     "The movie was amazing, the acting was superb.",
@@ -139,6 +139,10 @@ def read_embeddings_from_db(db_path="embeddings.db"):
 retrieved_embeddings = read_embeddings_from_db()
 print(retrieved_embeddings)
 
+#first we embedit and write everything to the DB, and here we read what we wrote to DB
 for text, embedding in retrieved_embeddings.items():
     print(f"Text: {text}")
     print(f"Embedding: {embedding}")
+    
+#save to the DB
+save_embeddings_to_db(embedding)
