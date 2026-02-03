@@ -78,25 +78,38 @@ print(similarity)
 
 # Function to save embeddings to a SQLite database
 def save_embeddings_to_db(embeddings, db_path="embeddings.db"):
+    """
+    embeddings: dict of {doc_id: (text, np.ndarray_embedding)}
+    """
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Create table if it doesn't exist
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS embeddings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            text TEXT,
-            embedding BLOB
+            doc_id TEXT PRIMARY KEY,
+            text TEXT NOT NULL,
+            dim INTEGER NOT NULL,
+            embedding BLOB NOT NULL
         )
-    ''')
+    """)
 
-    for text, embedding in embeddings.items():
-        # Convert the NumPy array to a bytes object
+    for doc_id, (text, embedding) in embeddings.items():
+        embedding = np.asarray(embedding, dtype=np.float32)  # enforce float32
         embedding_bytes = embedding.tobytes()
-        cursor.execute("INSERT INTO embeddings (text, embedding) VALUES (?, ?)", (text, embedding_bytes))
+        dim = int(embedding.shape[0])
+
+        cursor.execute("""
+            INSERT INTO embeddings (doc_id, text, dim, embedding)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(doc_id) DO UPDATE SET
+                text=excluded.text,
+                dim=excluded.dim,
+                embedding=excluded.embedding
+        """, (doc_id, text, dim, embedding_bytes))
 
     conn.commit()
     conn.close()
+
 
 # Example usage:
 # Load API key
@@ -134,6 +147,42 @@ def read_embeddings_from_db(db_path="embeddings.db"):
 
     conn.close()
     return embeddings
+
+def search_top_k(query, vectorizer, k=5, db_path="embeddings.db"):
+    """
+    Returns top-k most relevant doc_ids (and scores) for a query.
+    """
+    q = vectorizer.vectorize(query)
+    q = np.asarray(q, dtype=np.float32)
+
+    q_norm = np.linalg.norm(q)
+    if q_norm == 0:
+        return []
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT doc_id, dim, embedding FROM embeddings")
+    rows = cursor.fetchall()
+    conn.close()
+
+    scored = []
+    for doc_id, dim, emb_blob in rows:
+        v = np.frombuffer(emb_blob, dtype=np.float32)
+
+        # safety check
+        if v.shape[0] != dim:
+            continue
+
+        denom = (np.linalg.norm(v) * q_norm)
+        if denom == 0:
+            continue
+
+        score = float(np.dot(v, q) / denom)  # cosine similarity
+        scored.append((doc_id, score))
+
+    scored.sort(key=lambda x: x[1], reverse=True)
+    return scored[:k]
+
 
 # Example usage:
 retrieved_embeddings = read_embeddings_from_db()
