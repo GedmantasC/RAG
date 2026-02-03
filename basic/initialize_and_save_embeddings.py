@@ -123,8 +123,12 @@ texts = [
     "I had a terrible experience at the hotel."
 ]
 embeddings_dict = {}
-for text in texts:
-  embeddings_dict[text] = vectorizer.vectorize(text)
+for i, text in enumerate(texts):
+    doc_id = f"doc_{i+1:03d}"
+    embeddings_dict[doc_id] = (text, vectorizer.vectorize(text))
+
+save_embeddings_to_db(embeddings_dict)
+
 
 # Save embeddings to the database
 save_embeddings_to_db(embeddings_dict)
