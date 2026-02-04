@@ -5,6 +5,8 @@ secrets.toml
 
 # Databases / vector stores
 *.db
+chroma_db/
+
 
 # Python
 __pycache__/
