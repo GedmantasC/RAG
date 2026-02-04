@@ -13,6 +13,8 @@ import sqlite3
 import bs4
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings
+from langchain_chroma import Chroma
 
 
 #load text, that will be used as a DB info for RAG
@@ -26,5 +28,23 @@ loader = WebBaseLoader(
 )
 docs = loader.load()
 
+#split the text
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 all_splits = text_splitter.split_documents(docs)
+
+# Load API key
+secrets = toml.load(".key/secrets.toml")
+
+os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
+
+# ✅ create vector store in ChromaDB
+embeddings = OpenAIEmbeddings()
+vector_store = Chroma(
+    collection_name="agents_article",
+    embedding_function=embeddings,
+    persist_directory="./chroma_db",  # optional (saves locally)
+)
+
+#Store info in ChromaDB
+_ = vector_store.add_documents(documents=all_splits)
+print("✅ Added", len(all_splits), "chunks to Chroma")
