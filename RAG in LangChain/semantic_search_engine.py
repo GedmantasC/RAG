@@ -32,10 +32,13 @@ documents = [
 # print(documents)
 
 
-
+#here I load the pdf document that later will be used as DB
 file_path = "https://raw.githubusercontent.com/langchain-ai/langchain/v0.3/docs/docs/example_data/nke-10k-2023.pdf"
 loader = PyPDFLoader(file_path)
 
 docs = loader.load()
 
 print(len(docs))
+
+print(f"{docs[0].page_content[:200]}\n")
+print(docs[0].metadata)
