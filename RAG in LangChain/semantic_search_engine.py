@@ -16,6 +16,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
+from langchain_community.document_loaders import PyPDFLoader
 
 documents = [
     Document(
@@ -28,4 +29,13 @@ documents = [
     ),
 ]
 
-print(documents)
+# print(documents)
+
+
+
+file_path = "https://raw.githubusercontent.com/langchain-ai/langchain/v0.3/docs/docs/example_data/nke-10k-2023.pdf"
+loader = PyPDFLoader(file_path)
+
+docs = loader.load()
+
+print(len(docs))
