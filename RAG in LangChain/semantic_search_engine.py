@@ -74,4 +74,17 @@ print(vector_1[:10])
 #save our vectors in memory
 vector_store = InMemoryVectorStore(embeddings)
 
+#here ve index the document
 ids = vector_store.add_documents(documents=all_splits)
+
+#provide question and get answer
+results = vector_store.similarity_search("How many distribution centers does Nike have in the US?")
+
+print(results[0])
+
+# Note that providers implement different scores; the score here
+# is a distance metric that varies inversely with similarity.
+results = vector_store.similarity_search_with_score("What was Nike's revenue in 2023?")
+doc, score = results[0]
+print(f"Score: {score}\n")
+print(doc)
