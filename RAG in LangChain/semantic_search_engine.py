@@ -18,6 +18,7 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader
 import getpass
+from langchain_core.vectorstores import InMemoryVectorStore
 
 documents = [
     Document(
@@ -69,3 +70,8 @@ vector_2 = embeddings.embed_query(all_splits[1].page_content)
 assert len(vector_1) == len(vector_2)
 print(f"Generated vectors of length {len(vector_1)}\n")
 print(vector_1[:10])
+
+#save our vectors in memory
+vector_store = InMemoryVectorStore(embeddings)
+
+ids = vector_store.add_documents(documents=all_splits)
