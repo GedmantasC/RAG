@@ -78,6 +78,7 @@ vector_store = InMemoryVectorStore(embeddings)
 ids = vector_store.add_documents(documents=all_splits)
 
 #provide question and get answer
+#keep in mind that it provides vector that is the closed one to the one that we make
 results = vector_store.similarity_search("How many distribution centers does Nike have in the US?")
 
 print(results[0])
@@ -88,3 +89,8 @@ results = vector_store.similarity_search_with_score("What was Nike's revenue in 
 doc, score = results[0]
 print(f"Score: {score}\n")
 print(doc)
+
+#here before we make enbeding from our query and later calculate distance to have an answer
+embedding = embeddings.embed_query("How were Nike's margins impacted in 2023?")
+results = vector_store.similarity_search_by_vector(embedding)
+print(results[0])
