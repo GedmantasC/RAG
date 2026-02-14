@@ -1,3 +1,5 @@
+'''Idea is to have a document, use it as a database and then ask questions. Program 
+gives you parts of text that could be used to have results'''
 import json
 import os
 from typing import List, Dict, Callable
@@ -98,11 +100,11 @@ embedding = embeddings.embed_query("How were Nike's margins impacted in 2023?")
 results = vector_store.similarity_search_by_vector(embedding)
 print(results[0])
 
-
-@chain
-def retriever(query: str) -> List[Document]:
-    return vector_store.similarity_search(query, k=1)
-
+#this is more efficient way to have retriev
+retriever = vector_store.as_retriever(
+    search_type="similarity",
+    search_kwargs={"k": 1},
+)
 
 retriever.batch(
     [
