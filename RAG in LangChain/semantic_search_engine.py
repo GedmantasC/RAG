@@ -19,6 +19,9 @@ from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader
 import getpass
 from langchain_core.vectorstores import InMemoryVectorStore
+from typing import List
+from langchain_core.documents import Document
+from langchain_core.runnables import chain
 
 documents = [
     Document(
@@ -94,3 +97,16 @@ print(doc)
 embedding = embeddings.embed_query("How were Nike's margins impacted in 2023?")
 results = vector_store.similarity_search_by_vector(embedding)
 print(results[0])
+
+
+@chain
+def retriever(query: str) -> List[Document]:
+    return vector_store.similarity_search(query, k=1)
+
+
+retriever.batch(
+    [
+        "How many distribution centers does Nike have in the US?",
+        "When was Nike incorporated?",
+    ],
+)
