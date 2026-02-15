@@ -23,7 +23,7 @@ from typing import List
 from langchain_core.runnables import chain
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.prompts import ChatPromptTemplate
+from typing_extensions import List, TypedDict
 
 
 
@@ -56,6 +56,7 @@ all_splits = text_splitter.split_documents(docs)
 # Index chunks
 _ = vector_store.add_documents(documents=all_splits)
 
+#here we define how to talk with the llm
 prompt = ChatPromptTemplate.from_template(
     """You are a helpful assistant. Use the context to answer the question.
 If you don't know, say you don't know.
@@ -67,3 +68,14 @@ Question: {question}
 
 Answer:"""
 )
+
+# Define state for application
+class State(TypedDict):
+    question: str
+    context: List[Document]
+    answer: str
+
+# Define application steps
+def retrieve(state: State):
+  retrieved_docs = vector_store.similarity_search(state["question"])
+  return {"context": retrieved_docs}
