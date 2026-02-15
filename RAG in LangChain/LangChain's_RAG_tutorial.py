@@ -20,9 +20,12 @@ from langchain_community.document_loaders import PyPDFLoader
 import getpass
 from langchain_core.vectorstores import InMemoryVectorStore
 from typing import List
-from langchain_core.documents import Document
 from langchain_core.runnables import chain
 from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
+
+
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -32,3 +35,35 @@ if not os.environ.get("OPENAI_API_KEY"):
 
 llm = ChatOpenAI(model="gpt-4o-mini")
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+
+#save our vectors in memory
+vector_store = InMemoryVectorStore(embeddings)
+
+# Load and chunk contents of the blog
+loader = WebBaseLoader(
+    web_paths=("https://lilianweng.github.io/posts/2023-06-23-agent/",),
+    bs_kwargs=dict(
+        parse_only=bs4.SoupStrainer(
+            class_=("post-content", "post-title", "post-header")
+        )
+    ),
+)
+docs = loader.load()
+
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+all_splits = text_splitter.split_documents(docs)
+
+# Index chunks
+_ = vector_store.add_documents(documents=all_splits)
+
+prompt = ChatPromptTemplate.from_template(
+    """You are a helpful assistant. Use the context to answer the question.
+If you don't know, say you don't know.
+
+Context:
+{context}
+
+Question: {question}
+
+Answer:"""
+)
