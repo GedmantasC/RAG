@@ -24,7 +24,7 @@ from langchain_core.runnables import chain
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from typing_extensions import List, TypedDict
-
+from langgraph.graph import START, StateGraph
 
 
 # Load API key
@@ -79,3 +79,18 @@ class State(TypedDict):
 def retrieve(state: State):
   retrieved_docs = vector_store.similarity_search(state["question"])
   return {"context": retrieved_docs}
+
+#main part for talking with llm 
+def generate(state: State):
+    docs_content = "\n\n".join(doc.page_content for doc in state["context"])
+    messages = prompt.invoke({"question": state["question"], "context": docs_content})
+    response = llm.invoke(messages)
+    return {"answer": response.content}
+
+# Compile application and test
+graph_builder = StateGraph(State).add_sequence([retrieve, generate])
+graph_builder.add_edge(START, "retrieve")
+graph = graph_builder.compile()
+
+# Display the compiled graph in the notebook
+graph
