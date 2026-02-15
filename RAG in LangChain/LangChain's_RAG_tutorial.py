@@ -94,3 +94,7 @@ graph = graph_builder.compile()
 
 # Display the compiled graph in the notebook
 graph
+
+#the idea is that we create a frame
+result = graph.invoke({"question": "What is the capital of Lithuania?", "context": [], "answer": ""})
+print(result["answer"])
