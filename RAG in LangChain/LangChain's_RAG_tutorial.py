@@ -103,7 +103,13 @@ def generate(state: State):
     docs_content = "\n\n".join(doc.page_content for doc in state["context"])
     messages = prompt.invoke({"question": state["question"], "context": docs_content})
     response = llm.invoke(messages)
-    return {"answer": response.content}
+
+    sources = []
+    for doc in state["context"]:
+        # WebBaseLoader usually has `source` in metadata; docx you can set it yourself
+        sources.append(doc.metadata.get("source") or doc.metadata.get("file_path") or doc.metadata.get("source_type"))
+
+    return {"answer": response.content + "\n\nSources:\n- " + "\n- ".join(map(str, sources))}
 
 # Compile application and test
 graph_builder = StateGraph(State).add_sequence([retrieve, generate])
@@ -114,5 +120,5 @@ graph = graph_builder.compile()
 graph
 
 #the idea is that we create a frame of prompt and as context for the prompt we provide our link. 
-result = graph.invoke({"question": "What is Hungary buying from Russia?", "context": [], "answer": ""})
+result = graph.invoke({"question": "What did Juozas Olekas told?", "context": [], "answer": ""})
 print(result["answer"])
