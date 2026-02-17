@@ -42,18 +42,31 @@ vector_store = InMemoryVectorStore(embeddings)
 
 # Load and chunk contents of the blog
 # changed the code and made it simple to have more than one scourse for RAG
-# loader = WebBaseLoader(
-#     web_paths=(
-#         "https://lilianweng.github.io/posts/2023-06-23-agent/",
-#         "https://www.delfi.lt/en/politics/olekas-names-conditions-for-belarus-to-resume-potash-fertiliser-transit-120211817",
-#     )
-# )
-# docs = loader.load()
+# --- Load WEB docs ---
+web_loader = WebBaseLoader(
+    web_paths=(
+        "https://lilianweng.github.io/posts/2023-06-23-agent/",
+        "https://www.delfi.lt/en/politics/olekas-names-conditions-for-belarus-to-resume-potash-fertiliser-transit-120211817",
+    )
+)
+web_docs = web_loader.load()
 
-# Load and chunk contents from a local Word document
-loader = UnstructuredWordDocumentLoader(r"C:\Users\Hp\Documents\TuringCollege\AI Enginering\Mokausi AIE\RAG\RAG in LangChain/cnn_page.docx")
-docs = loader.load()
+#load from my computer
+word_paths = [
+    r"C:\Users\Hp\Documents\TuringCollege\AI Enginering\Mokausi AIE\RAG\RAG in LangChain/cnn_page.docx"
+]
+word_docs = []
+for p in word_paths:
+    word_docs.extend(UnstructuredWordDocumentLoader(p).load())
 
+#combine both scourses
+docs = web_docs + word_docs
+
+#here we add clear scourse for the metadata to know which one is used for the answer
+for d in web_docs:
+    d.metadata["source_type"] = "web"
+for d in word_docs:
+    d.metadata["source_type"] = "docx"
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 all_splits = text_splitter.split_documents(docs)
