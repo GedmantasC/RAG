@@ -25,6 +25,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from typing_extensions import List, TypedDict
 from langgraph.graph import START, StateGraph
+from langchain_community.document_loaders import UnstructuredWordDocumentLoader
 
 
 # Load API key
@@ -41,12 +42,16 @@ vector_store = InMemoryVectorStore(embeddings)
 
 # Load and chunk contents of the blog
 # changed the code and made it simple to have more than one scourse for RAG
-loader = WebBaseLoader(
-    web_paths=(
-        "https://lilianweng.github.io/posts/2023-06-23-agent/",
-        "https://www.delfi.lt/en/politics/olekas-names-conditions-for-belarus-to-resume-potash-fertiliser-transit-120211817",
-    )
-)
+# loader = WebBaseLoader(
+#     web_paths=(
+#         "https://lilianweng.github.io/posts/2023-06-23-agent/",
+#         "https://www.delfi.lt/en/politics/olekas-names-conditions-for-belarus-to-resume-potash-fertiliser-transit-120211817",
+#     )
+# )
+# docs = loader.load()
+
+# Load and chunk contents from a local Word document
+loader = UnstructuredWordDocumentLoader(r"C:\Users\Hp\Documents\TuringCollege\AI Enginering\Mokausi AIE\RAG\RAG in LangChain/cnn_page.docx")
 docs = loader.load()
 
 
@@ -96,5 +101,5 @@ graph = graph_builder.compile()
 graph
 
 #the idea is that we create a frame of prompt and as context for the prompt we provide our link. 
-result = graph.invoke({"question": "What are certain conditions for Belarus accornd to Juozas Olekas?", "context": [], "answer": ""})
+result = graph.invoke({"question": "What is Hungary buying from Russia?", "context": [], "answer": ""})
 print(result["answer"])
