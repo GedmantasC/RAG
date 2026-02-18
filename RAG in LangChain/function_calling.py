@@ -35,7 +35,7 @@ if not os.environ.get("OPENAI_API_KEY"):
 
 client = OpenAI(api_key=secrets["OPENAI_API_KEY"])
 
-# Define tools with the calculator_add function
+# Define tools with the calculator_add function. we tell for LLM what to do if somebody asks to add two numbers
 tools = [
     {
         "type": "function",
@@ -52,3 +52,13 @@ tools = [
         },
     }
 ]
+
+# Simulate a conversation
+completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Add 8 and 12."}],
+    tools=tools,
+)
+
+# Output tool calls (the function call details)
+print(completion.choices[0].message.tool_calls)
