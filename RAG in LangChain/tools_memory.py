@@ -24,3 +24,14 @@ def calculate(expression: str) -> str:
     
 # Create model
 model = ChatOpenAI(model="gpt-4o")
+
+# Create checkpointer for memory
+checkpointer = InMemorySaver()
+
+# Create agent - this handles all the tool calling logic!
+agent = create_agent(
+    model=model,
+    tools=[get_weather, calculate],
+    system_prompt="You are a helpful assistant that can check weather and do calculations.",
+    checkpointer=checkpointer,
+)
