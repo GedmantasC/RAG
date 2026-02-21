@@ -37,4 +37,7 @@ agent = create_agent(
 )
 
 # Use the agent with thread-based memory
+#Idea of this is to save conversation. I you talk with model with this it would remember all messages in the conversation
+#example. User: My name is Ged. User: What is my name? Agent: Your name is Ged.
+#if you change the thread_id it becomes a totally new conversations
 config = {"configurable": {"thread_id": "conversation-1"}}
