@@ -2,6 +2,10 @@ from langchain.agents import create_agent
 from langchain_core.tools import tool
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_openai import ChatOpenAI
+import os
+import toml
+from openai import OpenAI
+import getpass
 
 # Define tools - same pattern as before!
 #also in general LLM is used just to predict text, i does'nt have access to the current internet. To do that we describe tools, that allows to check something or do calculation 
@@ -21,7 +25,16 @@ def calculate(expression: str) -> str:
         return f"Result: {result}"
     except Exception as e:
         return f"Error: {str(e)}"
-    
+
+# Load API key
+secrets = toml.load(".key/secrets.toml")
+os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
+if not os.environ.get("OPENAI_API_KEY"):
+    os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
+
+client = OpenAI(api_key=secrets["OPENAI_API_KEY"])
+
+
 # Create model
 model = ChatOpenAI(model="gpt-4o")
 
@@ -41,3 +54,10 @@ agent = create_agent(
 #example. User: My name is Ged. User: What is my name? Agent: Your name is Ged.
 #if you change the thread_id it becomes a totally new conversations
 config = {"configurable": {"thread_id": "conversation-1"}}
+
+# First message
+response = agent.invoke(
+    {"messages": [{"role": "user", "content": "What's the weather in Paris?"}]},
+    config=config
+)
+print(response["messages"][-1].content)
