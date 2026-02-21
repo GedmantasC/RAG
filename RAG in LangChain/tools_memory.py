@@ -35,3 +35,6 @@ agent = create_agent(
     system_prompt="You are a helpful assistant that can check weather and do calculations.",
     checkpointer=checkpointer,
 )
+
+# Use the agent with thread-based memory
+config = {"configurable": {"thread_id": "conversation-1"}}
