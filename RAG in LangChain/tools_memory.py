@@ -10,6 +10,7 @@ import getpass
 # Define tools - same pattern as before!
 #also in general LLM is used just to predict text, i does'nt have access to the current internet. To do that we describe tools, that allows to check something or do calculation 
 #also this function will always return hardcoded value, but in real live here should be api calling
+#also dock strings are important because LLM use it to understand whet to use this tool
 @tool
 def get_weather(city: str) -> str:
     """Get the current weather for a city."""
@@ -41,6 +42,7 @@ client = OpenAI(api_key=secrets["OPENAI_API_KEY"])
 model = ChatOpenAI(model="gpt-4o")
 
 # Create checkpointer for memory
+#I reserve some space to store conversation. This disapiers after restarting conversation
 checkpointer = InMemorySaver()
 
 # Create agent - this handles all the tool calling logic!
