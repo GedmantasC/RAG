@@ -6,6 +6,7 @@ import os
 import toml
 from openai import OpenAI
 import getpass
+from langgraph.checkpoint.sqlite import SqliteSaver
 
 # Define tools - same pattern as before!
 #also in general LLM is used just to predict text, i does'nt have access to the current internet. To do that we describe tools, that allows to check something or do calculation 
@@ -44,6 +45,8 @@ model = ChatOpenAI(model="gpt-4o")
 # Create checkpointer for memory
 #I reserve some space to store conversation. This disapiers after restarting conversation
 checkpointer = InMemorySaver()
+# With this one it will be saved in a db, so conversation is not gone. 
+#checkpointer = SqliteSaver.from_conn_string("checkpoints.db")
 
 # Create agent - this handles all the tool calling logic!
 agent = create_agent(
