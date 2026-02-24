@@ -7,6 +7,7 @@ import toml
 from openai import OpenAI
 import getpass
 from langgraph.checkpoint.sqlite import SqliteSaver
+from mcp.server.fastmcp import FastMCP
 
 # Define tools - same pattern as before!
 #also in general LLM is used just to predict text, i does'nt have access to the current internet. To do that we describe tools, that allows to check something or do calculation 
@@ -68,3 +69,5 @@ response = agent.invoke(
     config=config
 )
 print(response["messages"][-1].content)
+
+mcp = FastMCP("weather")
