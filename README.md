@@ -16,6 +16,7 @@ This repo focuses on hands-on exploration of core RAG concepts, including:
 - Chunking strategies
 - Simple retrieval pipelines
 - Experiments with different RAG design choices
+- ChromaDb
 
 Each folder contains small, focused experiments rather than one large application.
 
