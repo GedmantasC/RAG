@@ -70,4 +70,12 @@ response = agent.invoke(
 )
 print(response["messages"][-1].content)
 
+#from here trying model context protocol
 mcp = FastMCP("weather")
+
+@mcp.tool()
+def get_weather():
+    """
+    Gets the current weather.
+    """
+    return "The weather is sunny with a high of 21°C"
