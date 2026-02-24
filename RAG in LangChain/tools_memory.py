@@ -79,3 +79,6 @@ def get_weather():
     Gets the current weather.
     """
     return "The weather is sunny with a high of 21°C"
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")
