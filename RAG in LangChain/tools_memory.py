@@ -65,7 +65,7 @@ config = {"configurable": {"thread_id": "conversation-1"}}
 
 # First message
 response = agent.invoke(
-    {"messages": [{"role": "user", "content": "What's the weather in Paris?"}]},
+    {"messages": [{"role": "user", "content": "What's the weather in Vilnius?"}]},
     config=config
 )
 print(response["messages"][-1].content)
