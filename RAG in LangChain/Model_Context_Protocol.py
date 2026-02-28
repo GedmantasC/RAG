@@ -24,3 +24,11 @@ async def main():
         system_prompt="You are a helpful weather assistant.",
         checkpointer=checkpointer,
     )
+
+     # Use the agent with thread-based memory
+    config = {"configurable": {"thread_id": "user-123"}}
+    response = await agent.ainvoke(
+        {"messages": [{"role": "user", "content": "What's the weather in NYC?"}]},
+        config=config
+    )
+    print(response["messages"][-1].content)
