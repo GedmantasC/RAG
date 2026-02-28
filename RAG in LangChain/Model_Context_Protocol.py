@@ -1,34 +1,36 @@
 from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain.agents import create_agent
+from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+import asyncio
 
 load_dotenv()
 
 async def main():
-    # Connect to MCP server and fetch tools
     client = MultiServerMCPClient({
         "weather": {
-            "url": "http://localhost:8000/mcp/",
-            "transport": "streamable_http",
+            "transport": "stdio",
+            "command": "python",
+            # replace this with the actual server you want to run:
+            "args": ["-m", "your_weather_mcp_server_module"]
         }
     })
+
     tools = await client.get_tools()
 
-    # Create agent with MCP tools and memory - just like before!
-    checkpointer = InMemorySaver()
-    agent = create_agent(
+    agent = create_react_agent(
         model=ChatOpenAI(model="gpt-4o-mini"),
-        tools=tools,  # MCP tools work seamlessly
-        system_prompt="You are a helpful weather assistant.",
-        checkpointer=checkpointer,
+        tools=tools,
+        checkpointer=InMemorySaver(),
     )
 
-     # Use the agent with thread-based memory
     config = {"configurable": {"thread_id": "user-123"}}
-    response = await agent.ainvoke(
+    result = await agent.ainvoke(
         {"messages": [{"role": "user", "content": "What's the weather in NYC?"}]},
-        config=config
+        config=config,
     )
-    print(response["messages"][-1].content)
+    print(result["messages"][-1].content)
+
+if __name__ == "__main__":
+    asyncio.run(main())
