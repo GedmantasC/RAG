@@ -15,4 +15,12 @@ async def main():
         }
     })
     tools = await client.get_tools()
-    
+
+    # Create agent with MCP tools and memory - just like before!
+    checkpointer = InMemorySaver()
+    agent = create_agent(
+        model=ChatOpenAI(model="gpt-4o-mini"),
+        tools=tools,  # MCP tools work seamlessly
+        system_prompt="You are a helpful weather assistant.",
+        checkpointer=checkpointer,
+    )
