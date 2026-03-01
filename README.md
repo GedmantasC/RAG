@@ -18,6 +18,7 @@ This repo focuses on hands-on exploration of core RAG concepts, including:
 - Experiments with different RAG design choices
 - ChromaDb
 - Tools
+- Model Context Protocol (MCP)
 
 Each folder contains small, focused experiments rather than one large application.
 
