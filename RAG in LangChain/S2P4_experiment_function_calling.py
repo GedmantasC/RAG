@@ -42,6 +42,17 @@ def calculator_add(num1, num2):
 # Simulate a conversation
 completion = client.chat.completions.create(
     model="gpt-4o",
-    messages=[{"role": "user", "content": "Add 8 and 12."}],
+    messages=[{"role": "user", "content": "Add 10 and 12."}],
     tools=tools,
 )
+
+# Output tool calls (the function call details)
+print(completion.choices[0].message.tool_calls)
+
+# Simulating the tool being invoked
+tool_calls = completion.choices[0].message.tool_calls
+tool_call = tool_calls[0]
+function_name = tool_call.function.name
+arguments = eval(tool_call.function.arguments)
+result = calculator_add(**arguments)
+print(result)
