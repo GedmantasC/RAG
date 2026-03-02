@@ -38,3 +38,10 @@ tools = [
 # Example of calling the function with the extracted arguments
 def calculator_add(num1, num2):
     return num1 + num2
+
+# Simulate a conversation
+completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Add 8 and 12."}],
+    tools=tools,
+)
