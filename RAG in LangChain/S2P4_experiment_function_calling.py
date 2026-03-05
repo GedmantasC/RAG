@@ -7,6 +7,7 @@ from langchain_core.tools import tool
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import InMemorySaver
 
+
 # Load API key
 secrets = toml.load(".key/secrets.toml")
 os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
@@ -22,20 +23,23 @@ def calculator_minus(num1: float, num2: float) -> float:
     return num1 - num2
 
 @tool
-def exchange_rate(base: str, target: str) -> str:
-    """Get the FX exchange rate from base currency to target currency."""
-    url = "https://api.exchangerate.host/latest"
-    params = {"base": base.upper(), "symbols": target.upper()}
+def chuck_norris_joke() -> str:
+    """Get a random Chuck Norris joke."""
+    
+    url = "https://api.chucknorris.io/jokes/random"
 
-    with httpx.Client(timeout=10.0) as client:
-        r = client.get(url, params=params)
-        r.raise_for_status()
-        data = r.json()
+    try:
+        with httpx.Client(timeout=10.0) as client:
+            r = client.get(url)
+            r.raise_for_status()
+            data = r.json()
 
-    rate = data["rates"][target.upper()]
-    return json.dumps({"base": base.upper(), "target": target.upper(), "rate": rate})
+        return json.dumps({"joke": data["value"]})
 
-tools = [calculator_add, calculator_minus, exchange_rate]
+    except Exception as e:
+        return json.dumps({"error": str(e)})
+
+tools = [calculator_add, calculator_minus, chuck_norris_joke]
 
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
@@ -51,7 +55,7 @@ def run_prompt(prompt: str, thread_id: str = "demo"):
     )
     print("Assistant:", result["messages"][-1].content)
 
-print(exchange_rate.invoke({"base": "USD", "target": "EUR"}))
+run_prompt("Tell me a Chuck Norris joke")
 
 # run_prompt("add 10 and 12")
 # run_prompt("subtract 12 from 10")
