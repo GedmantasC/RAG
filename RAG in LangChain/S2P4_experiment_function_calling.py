@@ -9,6 +9,7 @@ import getpass
 from langgraph.checkpoint.sqlite import SqliteSaver
 from mcp.server.fastmcp import FastMCP
 import json
+import httpx
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -59,10 +60,25 @@ def calculator_add(num1, num2):
 def calculator_minus(num1, num2):
     return num1 - num2
 
-# Map tool name -> function
+@tool
+def exchange_rate(base: str, target: str) -> str:
+    """Get the FX exchange rate from base currency to target currency."""
+    url = "https://api.exchangerate.host/latest"
+    params = {"base": base.upper(), "symbols": target.upper()}
+
+    with httpx.Client(timeout=10.0) as client:
+        r = client.get(url, params=params)
+        r.raise_for_status()
+        data = r.json()
+
+    rate = data["rates"][target.upper()]
+    return json.dumps({"base": base.upper(), "target": target.upper(), "rate": rate})
+
+# this one is here because with it it's easier to have tools in one place and later to upscale
 TOOL_ROUTER = {
     "calculator_add": calculator_add,
     "calculator_minus": calculator_minus,
+    "exchange_rate":exchange_rate,
 }
 
 def run_prompt(prompt: str):
@@ -73,7 +89,7 @@ def run_prompt(prompt: str):
         model="gpt-4o",
         messages=messages,
         tools=tools,
-        tool_choice="auto",  # default; explicit for clarity
+        tool_choice="auto", 
     )
 
     msg = resp.choices[0].message
@@ -120,3 +136,4 @@ def run_prompt(prompt: str):
 # Try it
 run_prompt("add 10 and 12")
 run_prompt("subtract 12 from 10")
+run_prompt("convert 1 USD to EUR in current rate")
