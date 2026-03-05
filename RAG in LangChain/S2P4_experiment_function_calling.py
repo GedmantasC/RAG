@@ -51,6 +51,8 @@ def run_prompt(prompt: str, thread_id: str = "demo"):
     )
     print("Assistant:", result["messages"][-1].content)
 
-run_prompt("add 10 and 12")
-run_prompt("subtract 12 from 10")
-run_prompt("convert 1 USD to EUR in current rate")
+print(exchange_rate.invoke({"base": "USD", "target": "EUR"}))
+
+# run_prompt("add 10 and 12")
+# run_prompt("subtract 12 from 10")
+# run_prompt("convert 1 USD to EUR in current rate")
