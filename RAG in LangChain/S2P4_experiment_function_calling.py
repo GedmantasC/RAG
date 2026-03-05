@@ -7,6 +7,7 @@ from langchain_core.tools import tool
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import InMemorySaver
 
+'''in general what langchain does, it allows to awoid writting huge functions, instead you use @tool define tool as a function and you get a result'''
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -56,7 +57,5 @@ def run_prompt(prompt: str, thread_id: str = "demo"):
     print("Assistant:", result["messages"][-1].content)
 
 run_prompt("Tell me a Chuck Norris joke")
-
-# run_prompt("add 10 and 12")
-# run_prompt("subtract 12 from 10")
-# run_prompt("convert 1 USD to EUR in current rate")
+run_prompt("add 10 and 12")
+run_prompt("subtract 12 from 10")
