@@ -66,3 +66,18 @@ def analyze_resume(resume_text: str) -> str:
 # Create agent
 tools = [search_jobs, compare_salaries, analyze_resume]
 model = ChatOpenAI(model=MODEL)
+
+# Create agent
+tools = [search_jobs, compare_salaries, analyze_resume]
+model = ChatOpenAI(model=MODEL)
+
+agent = create_agent(
+    model=model,
+    tools=tools,
+    system_prompt=(
+        "You are a career consultant. Use your tools when you need "
+        "real data. For general advice questions, respond directly "
+        "without calling tools."
+    ),
+)
+print("Agent created with tools:", [t.name for t in tools])
