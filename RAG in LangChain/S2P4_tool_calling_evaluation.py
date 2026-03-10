@@ -180,3 +180,5 @@ test_cases = [
         "difficulty": "edge_case",
     },
 ]
+
+print(f"Total test cases: {len(test_cases)}")
