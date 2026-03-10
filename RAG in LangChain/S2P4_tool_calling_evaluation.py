@@ -9,6 +9,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
+from collections import defaultdict
 
 
 # Load API key
@@ -182,3 +183,10 @@ test_cases = [
 ]
 
 print(f"Total test cases: {len(test_cases)}")
+
+by_difficulty = defaultdict(list)
+for case in test_cases:
+    by_difficulty[case["difficulty"]].append(case)
+
+for diff, cases in by_difficulty.items():
+    print(f"  {diff}: {len(cases)} cases")
