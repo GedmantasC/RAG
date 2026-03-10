@@ -184,9 +184,12 @@ test_cases = [
 
 print(f"Total test cases: {len(test_cases)}")
 
-by_difficulty = defaultdict(list)
+by_difficulty = defaultdict(list)#creates an empty list
 for case in test_cases:
     by_difficulty[case["difficulty"]].append(case)
 
 for diff, cases in by_difficulty.items():
     print(f"  {diff}: {len(cases)} cases")
+
+# Run agent on each test case and collect results
+results = []
