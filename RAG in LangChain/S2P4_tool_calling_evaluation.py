@@ -193,3 +193,10 @@ for diff, cases in by_difficulty.items():
 
 # Run agent on each test case and collect results
 results = []
+
+for i, case in enumerate(test_cases):
+    print(f"[{i+1}/{len(test_cases)}] {case['query'][:60]}...")
+    
+    response = agent.invoke(
+    {"messages": [{"role": "user", "content": case["query"]}]}
+    )
