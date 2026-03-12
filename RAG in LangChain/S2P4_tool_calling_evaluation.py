@@ -10,6 +10,7 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 from collections import defaultdict
+import pandas as pd
 
 
 # Load API key
@@ -238,3 +239,10 @@ for i, case in enumerate(test_cases):
     )
 
 print(f"\nCompleted {len(results)}/{len(test_cases)} test cases.")
+
+tool_accuracy = sum(r["tool_correct"] for r in results) / len(results)
+param_accuracy = sum(r["params_correct"] for r in results) / len(results)
+
+print(f"Tool Selection Accuracy: {tool_accuracy:.0%}")
+print(f"Parameter Accuracy:      {param_accuracy:.0%}")
+print()
