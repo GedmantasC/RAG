@@ -196,7 +196,13 @@ results = []
 
 for i, case in enumerate(test_cases):
     print(f"[{i+1}/{len(test_cases)}] {case['query'][:60]}...")
-    
+
     response = agent.invoke(
     {"messages": [{"role": "user", "content": case["query"]}]}
     )
+
+    # Extract tool calls from all messages in the response
+    tool_calls = []
+    for msg in response["messages"]:
+        if hasattr(msg, "tool_calls") and msg.tool_calls:
+            tool_calls.extend(msg.tool_calls)
