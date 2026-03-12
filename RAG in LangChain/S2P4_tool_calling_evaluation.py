@@ -222,3 +222,19 @@ for i, case in enumerate(test_cases):
         params_correct = actual_params == case["expected_params"]
     else:
         params_correct = False
+
+    results.append(
+        {
+            "query": case["query"],
+            "expected_tool": case["expected_tool"],
+            "actual_tool": actual_tool,
+            "tool_correct": tool_correct,
+            "expected_params": case["expected_params"],
+            "actual_params": actual_params,
+            "params_correct": params_correct,
+            "difficulty": case["difficulty"],
+            "response": response["messages"][-1].content,
+        }
+    )
+
+print(f"\nCompleted {len(results)}/{len(test_cases)} test cases.")
