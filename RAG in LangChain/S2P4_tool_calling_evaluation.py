@@ -209,3 +209,16 @@ for i, case in enumerate(test_cases):
 
     actual_tool = tool_calls[0]["name"] if tool_calls else None
     actual_params = tool_calls[0]["args"] if tool_calls else None
+
+    # Check tool selection
+    tool_correct = actual_tool == case["expected_tool"]
+
+    # Check parameters (only meaningful if tool selection was correct)
+    if case["expected_tool"] is None:
+        params_correct = tool_correct  # No tool expected = no params to check
+    elif case["expected_params"] is None:
+        params_correct = tool_correct  # Skip param check for this case
+    elif tool_correct and actual_params is not None:
+        params_correct = actual_params == case["expected_params"]
+    else:
+        params_correct = False
