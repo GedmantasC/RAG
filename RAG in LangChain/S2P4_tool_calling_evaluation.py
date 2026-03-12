@@ -206,3 +206,6 @@ for i, case in enumerate(test_cases):
     for msg in response["messages"]:
         if hasattr(msg, "tool_calls") and msg.tool_calls:
             tool_calls.extend(msg.tool_calls)
+
+    actual_tool = tool_calls[0]["name"] if tool_calls else None
+    actual_params = tool_calls[0]["args"] if tool_calls else None
