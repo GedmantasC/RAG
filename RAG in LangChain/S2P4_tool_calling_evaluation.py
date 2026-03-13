@@ -11,7 +11,8 @@ from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 from collections import defaultdict
 import pandas as pd
-
+from ragas.llms import llm_factory
+from ragas.metrics import DiscreteMetric
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -245,6 +246,7 @@ print(f"Parameter Accuracy:      {param_accuracy:.0%}")
 print()
 
 # Breakdown by difficulty
+#this part print how tests were passed or not based of the difficulty level
 print("Breakdown by difficulty:")
 by_difficulty = defaultdict(list)
 for r in results:
@@ -260,3 +262,25 @@ for r in results:
     status = "PASS" if r["tool_correct"] else "FAIL"
     print(f"  [{status}] {r['query'][:55]}...")
     print(f"         Expected: {r['expected_tool']}, Got: {r['actual_tool']}")
+
+#-----------------------------------------------------------------------------------------------
+
+llm = llm_factory(MODEL, client=client)
+
+metric = DiscreteMetric(
+    name="tool_selection",
+    allowed_values=["correct", "incorrect"],
+    prompt=(
+        "Evaluate whether the AI agent selected the appropriate tool.\n\n"
+        "Available tools:\n"
+        "- search_jobs: search for job openings by role and location\n"
+        "- compare_salaries: compare salary data for a role in a location\n"
+        "- analyze_resume: analyze resume text and suggest improvements\n"
+        "- NO TOOL: for general advice, off-topic, or conversational queries\n\n"
+        "User query: {user_query}\n"
+        "Expected tool: {expected_tool}\n"
+        "Actual tool selected: {actual_tool}\n\n"
+        "Was the tool selection appropriate for this query?\n"
+        "Answer with only 'correct' or 'incorrect'."
+    ),
+)
