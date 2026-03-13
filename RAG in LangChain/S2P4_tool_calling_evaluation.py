@@ -65,9 +65,6 @@ def analyze_resume(resume_text: str) -> str:
         }
     )
 
-# Create agent
-tools = [search_jobs, compare_salaries, analyze_resume]
-model = ChatOpenAI(model=MODEL)
 
 # Create agent
 tools = [search_jobs, compare_salaries, analyze_resume]
@@ -199,7 +196,7 @@ for i, case in enumerate(test_cases):
     print(f"[{i+1}/{len(test_cases)}] {case['query'][:60]}...")
 
     response = agent.invoke(
-    {"messages": [{"role": "user", "content": case["query"]}]}
+    {"messages": [{"role": "user", "content": case["query"]}]}#this is what we give to the LLM, and let it decide if it needs to use tool
     )
 
     # Extract tool calls from all messages in the response
@@ -246,3 +243,9 @@ param_accuracy = sum(r["params_correct"] for r in results) / len(results)
 print(f"Tool Selection Accuracy: {tool_accuracy:.0%}")
 print(f"Parameter Accuracy:      {param_accuracy:.0%}")
 print()
+
+# Breakdown by difficulty
+print("Breakdown by difficulty:")
+by_difficulty = defaultdict(list)
+for r in results:
+    by_difficulty[r["difficulty"]].append(r)
