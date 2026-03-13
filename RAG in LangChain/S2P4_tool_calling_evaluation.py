@@ -265,6 +265,8 @@ for r in results:
 
 #-----------------------------------------------------------------------------------------------
 
+#LLM-as-a-Judge with DiscreteMetric
+
 llm = llm_factory(MODEL, client=client)
 
 metric = DiscreteMetric(
@@ -287,3 +289,13 @@ metric = DiscreteMetric(
 
 print("Scoring each case with DiscreteMetric...\n")
 judge_results = []
+
+for i, r in enumerate(results):
+    score = metric.score(
+        llm=llm,
+        user_query=r["query"],
+        expected_tool=str(r["expected_tool"]),
+        actual_tool=str(r["actual_tool"]),
+    )
+    judge_results.append({"value": score.value, "reason": score.reason})
+    print(f"  Case {i+1}: {score.value} \u2014 {score.reason}")
