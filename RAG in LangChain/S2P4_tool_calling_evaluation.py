@@ -249,3 +249,7 @@ print("Breakdown by difficulty:")
 by_difficulty = defaultdict(list)
 for r in results:
     by_difficulty[r["difficulty"]].append(r)
+
+for diff, cases in by_difficulty.items():
+    acc = sum(c["tool_correct"] for c in cases) / len(cases)
+    print(f"  {diff:12s}: {acc:.0%} tool accuracy ({len(cases)} cases)")
