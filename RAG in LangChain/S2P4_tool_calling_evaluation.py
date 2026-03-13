@@ -284,3 +284,6 @@ metric = DiscreteMetric(
         "Answer with only 'correct' or 'incorrect'."
     ),
 )
+
+print("Scoring each case with DiscreteMetric...\n")
+judge_results = []
