@@ -253,3 +253,10 @@ for r in results:
 for diff, cases in by_difficulty.items():
     acc = sum(c["tool_correct"] for c in cases) / len(cases)
     print(f"  {diff:12s}: {acc:.0%} tool accuracy ({len(cases)} cases)")
+
+# Detailed results
+print("\nDetailed results:")
+for r in results:
+    status = "PASS" if r["tool_correct"] else "FAIL"
+    print(f"  [{status}] {r['query'][:55]}...")
+    print(f"         Expected: {r['expected_tool']}, Got: {r['actual_tool']}")
