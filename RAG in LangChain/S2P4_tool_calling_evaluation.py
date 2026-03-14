@@ -317,3 +317,8 @@ for r, j in zip(results, judge_results):
     marker = "  " if det == judge else "!!"
     if det == judge:
         agree_count += 1
+
+    print(f"{marker} {r['query'][:53]:<53} {det:>5} {judge:>7}")
+    if det != judge:
+        print(f"     Expected: {r['expected_tool']}, Got: {r['actual_tool']}")
+        print(f"     Reason: {j['reason']}")
