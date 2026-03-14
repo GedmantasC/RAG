@@ -322,3 +322,6 @@ for r, j in zip(results, judge_results):
     if det != judge:
         print(f"     Expected: {r['expected_tool']}, Got: {r['actual_tool']}")
         print(f"     Reason: {j['reason']}")
+
+print(f"\nAgreement: {agree_count}/{len(results)} ({agree_count/len(results):.0%})")
+print("!! = disagreement between deterministic and LLM-as-judge")
