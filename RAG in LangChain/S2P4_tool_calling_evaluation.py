@@ -310,3 +310,10 @@ print(f"{'Query':<55} {'Det':>5} {'Judge':>7}")
 print("-" * 70)
 
 agree_count = 0
+
+for r, j in zip(results, judge_results):
+    det = "PASS" if r["tool_correct"] else "FAIL"
+    judge = "PASS" if j["value"] == "correct" else "FAIL"
+    marker = "  " if det == judge else "!!"
+    if det == judge:
+        agree_count += 1
