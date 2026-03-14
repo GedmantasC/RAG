@@ -266,6 +266,7 @@ for r in results:
 #-----------------------------------------------------------------------------------------------
 
 #LLM-as-a-Judge with DiscreteMetric
+#in simple words we use LLM to decide which tool to use, when check for sure which tool is ok, and later we are back to llm by telling which were corect/incorect and ask to explain why
 
 llm = llm_factory(MODEL, client=client)
 
@@ -299,3 +300,11 @@ for i, r in enumerate(results):
     )
     judge_results.append({"value": score.value, "reason": score.reason})
     print(f"  Case {i+1}: {score.value} \u2014 {score.reason}")
+
+
+#----------------------------------------------------------------
+
+#Comparing Deterministic vs LLM-as-Judge
+
+print(f"{'Query':<55} {'Det':>5} {'Judge':>7}")
+print("-" * 70)
