@@ -308,3 +308,5 @@ for i, r in enumerate(results):
 
 print(f"{'Query':<55} {'Det':>5} {'Judge':>7}")
 print("-" * 70)
+
+agree_count = 0
