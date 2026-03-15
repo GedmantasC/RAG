@@ -28,3 +28,12 @@ async def main():
             print("Available tools:")
             for tool in tools.tools:
                 print(f"- {tool.name}: {tool.description}")
+
+            # 3) Call one tool by name
+            result = await session.call_tool(
+                "get_weather",
+                arguments={"city": "Vilnius"})
+            
+            # 4) Print the tool result
+            print("\nTool result:")
+            print(json.dumps(result.model_dump(), indent=2, ensure_ascii=False))
