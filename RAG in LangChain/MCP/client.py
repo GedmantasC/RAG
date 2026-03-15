@@ -2,7 +2,6 @@ import asyncio
 import json
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from mcp.server.fastmcp import FastMCP
 
 print("labas as krabas")
 
@@ -32,17 +31,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-mcp = FastMCP("WeatherServer")
-
-@mcp.tool()
-def get_weather(city: str) -> str:
-    data = {
-        "Vilnius": "5°C, cloudy",
-        "London": "9°C, rainy",
-        "Tokyo": "13°C, clear",
-    }
-    return data.get(city, f"No weather data for {city}")
-
-if __name__ == "__main__":
-    mcp.run()
