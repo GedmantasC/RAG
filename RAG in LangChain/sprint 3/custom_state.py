@@ -6,3 +6,10 @@ class ShoppingState(AgentState):
     budget: float
     preferred_category: str
 
+# Pass it to create_agent
+agent = create_agent(
+    model="gpt-4o-mini",
+    tools=[search_products, add_to_cart],
+    state_schema=ShoppingState
+)
+
