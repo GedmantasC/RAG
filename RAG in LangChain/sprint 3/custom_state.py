@@ -13,3 +13,10 @@ agent = create_agent(
     state_schema=ShoppingState
 )
 
+# Now you can initialize state when invoking
+agent.invoke({
+    "messages": [{"role": "user", "content": "Find laptops under $1000"}],
+    "cart_items": [],
+    "budget": 1000.0,
+    "preferred_category": "electronics"
+})
