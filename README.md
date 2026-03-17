@@ -20,6 +20,7 @@ This repo focuses on hands-on exploration of core RAG concepts, including:
 - Tools
 - Model Context Protocol (MCP)
 - External API usage
+- LLM for tools evaluation
 
 
 
