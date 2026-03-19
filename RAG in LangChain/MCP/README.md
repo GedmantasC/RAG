@@ -1,0 +1,1 @@
+In the server file you can find or add tools that could be accessed via client file
