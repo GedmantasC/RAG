@@ -47,3 +47,9 @@ agent.invoke(
     {"messages": [{"role": "user", "content": "Research AI agents"}]},
     {"configurable": {"thread_id": "research-session-1"}}
 )
+
+# Second invocation - agent still has state from first call
+agent.invoke(
+    {"messages": [{"role": "user", "content": "What have we learned so far?"}]},
+    {"configurable": {"thread_id": "research-session-1"}}  # Same thread
+)
