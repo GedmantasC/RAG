@@ -13,6 +13,20 @@ class ResearchState(AgentState):
     findings: dict[str, str]
     source_urls: list[str]
 
+class ResearchMiddleware(AgentMiddleware):
+    state_schema = ResearchState
+
+    def before_model(self, state, runtime):
+        # Initialize empty state if first run
+        if not state.get("topics_explored"):
+            return {
+                "topics_explored": [],
+                "findings": {},
+                "source_urls": []
+            }
+        return None
+
+
 # Pass it to create_agent
 agent = create_agent(
     model="gpt-4o-mini",
@@ -27,3 +41,9 @@ agent.invoke({
     "budget": 1000.0,
     "preferred_category": "electronics"
 })
+
+# First invocation
+agent.invoke(
+    {"messages": [{"role": "user", "content": "Research AI agents"}]},
+    {"configurable": {"thread_id": "research-session-1"}}
+)
