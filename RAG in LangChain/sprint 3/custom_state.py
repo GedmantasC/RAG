@@ -8,6 +8,11 @@ class ShoppingState(AgentState):
     budget: float
     preferred_category: str
 
+class ResearchState(AgentState):
+    topics_explored: list[str]
+    findings: dict[str, str]
+    source_urls: list[str]
+
 # Pass it to create_agent
 agent = create_agent(
     model="gpt-4o-mini",
