@@ -47,6 +47,16 @@ def add_item_to_cart(item_name: str, runtime: ToolRuntime) -> Command:
     """Add an item to the shopping cart."""
     current_cart = runtime.state.get("cart_items", [])
     updated_cart = current_cart + [item_name]
+    # Return Command to update state
+    return Command(update={
+        "cart_items": updated_cart,
+        "messages": [
+            ToolMessage(
+                content=f"Added {item_name} to cart. Cart now has {len(updated_cart)} items.",
+                tool_call_id=runtime.tool_call_id
+            )
+        ]
+    })
 
 
 # The LLM only sees: check_budget_remaining(item_price: float)
