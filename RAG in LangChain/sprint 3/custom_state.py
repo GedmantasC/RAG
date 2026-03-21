@@ -42,6 +42,13 @@ def check_budget_remaining(item_price: float, runtime: ToolRuntime) -> str:
     else:
         return f"No, only ${remaining} left in budget"
 
+@tool
+def add_item_to_cart(item_name: str, runtime: ToolRuntime) -> Command:
+    """Add an item to the shopping cart."""
+    current_cart = runtime.state.get("cart_items", [])
+    updated_cart = current_cart + [item_name]
+
+
 # The LLM only sees: check_budget_remaining(item_price: float)
 # It doesn't know about the runtime parameter
 
