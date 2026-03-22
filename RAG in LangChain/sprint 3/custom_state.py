@@ -78,7 +78,15 @@ def authorize_tools(request, handler):
     # For demo, we'll block "expensive" tools
     expensive_tools = ["web_scrape_full_site", "train_model"]
 
-    
+    if tool_name in expensive_tools:
+            return ToolMessage(
+                content=f"Tool '{tool_name}' requires premium subscription",
+                tool_call_id=request.tool_call["id"]
+            )
+
+        # Allow the tool to run
+    return handler(request)
+
 # The LLM only sees: check_budget_remaining(item_price: float)
 # It doesn't know about the runtime parameter
 
