@@ -72,7 +72,13 @@ def view_cart(runtime: ToolRuntime) -> str:
 def authorize_tools(request, handler):
     """Only allow certain tools based on user tier."""
     tool_name = request.tool_call["name"]
+# Imagine we have user tier in context
+    # user_tier = request.runtime.context.tier
 
+    # For demo, we'll block "expensive" tools
+    expensive_tools = ["web_scrape_full_site", "train_model"]
+
+    
 # The LLM only sees: check_budget_remaining(item_price: float)
 # It doesn't know about the runtime parameter
 
