@@ -68,6 +68,11 @@ def view_cart(runtime: ToolRuntime) -> str:
         return "Cart is empty"
     return f"Cart contains: {', '.join(cart)}"
 
+@wrap_tool_call
+def authorize_tools(request, handler):
+    """Only allow certain tools based on user tier."""
+    tool_name = request.tool_call["name"]
+
 # The LLM only sees: check_budget_remaining(item_price: float)
 # It doesn't know about the runtime parameter
 
