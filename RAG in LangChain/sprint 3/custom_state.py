@@ -1,6 +1,8 @@
 from langchain.agents import AgentState, create_agent
 from langchain.agents.middleware import AgentMiddleware
 from langchain.tools import tool, ToolRuntime
+from langchain.agents.middleware import wrap_tool_call
+from langchain_core.messages import ToolMessage
 
 # Define custom state by extending AgentState
 #The class provides structured memory for the agent.
