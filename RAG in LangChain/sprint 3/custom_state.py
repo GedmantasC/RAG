@@ -18,6 +18,8 @@ class ResearchState(AgentState):
     findings: dict[str, str]
     source_urls: list[str]
 
+#this one cleans everything before first run, so for sure
+#agent could start working
 class ResearchMiddleware(AgentMiddleware):
     state_schema = ResearchState
 
