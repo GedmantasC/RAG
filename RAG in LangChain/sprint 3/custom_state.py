@@ -37,6 +37,8 @@ class ResearchMiddleware(AgentMiddleware):
 def check_budget_remaining(item_price: float, runtime: ToolRuntime) -> str:
     """Check if an item fits within the user's budget."""
     # Access state via runtime - this parameter is HIDDEN from the LLM
+    #all these parameter are actually hidden from LLM, so not
+    #to leak info if not needed
     budget = runtime.state.get("budget", 0)
     cart_items = runtime.state.get("cart_items", [])
 
