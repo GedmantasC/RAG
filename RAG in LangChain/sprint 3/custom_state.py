@@ -98,6 +98,17 @@ def authorize_tools(request, handler):
 @wrap_tool_call
 def handle_tool_errors(request, handler):
     """Catch tool errors and return friendly messages."""
+    try:
+        print(f"[TOOL] Calling {request.tool_call['name']}")
+        result = handler(request)
+        print(f"[TOOL] Success: {request.tool_call['name']}")
+        return result
+    except Exception as e:
+        print(f"[TOOL] Error in {request.tool_call['name']}: {e}")
+        return ToolMessage(
+            content=f"Tool encountered an error: {str(e)[:100]}. Please try a different approach.",
+            tool_call_id=request.tool_call["id"]
+        )
 
 # The LLM only sees: check_budget_remaining(item_price: float)
 # It doesn't know about the runtime parameter
