@@ -95,6 +95,10 @@ def authorize_tools(request, handler):
         # Allow the tool to run
     return handler(request)
 
+@wrap_tool_call
+def handle_tool_errors(request, handler):
+    """Catch tool errors and return friendly messages."""
+
 # The LLM only sees: check_budget_remaining(item_price: float)
 # It doesn't know about the runtime parameter
 
