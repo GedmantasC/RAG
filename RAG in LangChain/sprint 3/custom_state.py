@@ -74,6 +74,8 @@ def view_cart(runtime: ToolRuntime) -> str:
         return "Cart is empty"
     return f"Cart contains: {', '.join(cart)}"
 
+#this tool allow to save tokens, if user asks to do something 
+#big
 @wrap_tool_call
 def authorize_tools(request, handler):
     """Only allow certain tools based on user tier."""
