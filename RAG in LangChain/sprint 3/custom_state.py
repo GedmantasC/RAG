@@ -6,6 +6,8 @@ from langchain_core.messages import ToolMessage
 
 # Define custom state by extending AgentState
 #The class provides structured memory for the agent.
+#AgentState allows not just to remember text messages between 
+#conversation, but also extra info like chart
 class ShoppingState(AgentState):
     cart_items: list[str]
     budget: float
