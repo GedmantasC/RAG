@@ -22,3 +22,16 @@ def search_products(query: str) -> str:
 
     results = [v for k, v in products.items() if query.lower() in k]
     return "\n".join(results) if results else "No products found."
+
+# Step 3: Create agent with custom state
+model = ChatOpenAI(model="gpt-4o-mini")
+checkpointer = MemorySaver()
+
+shopping_agent = create_agent(
+    model=model,
+    tools=[search_products],
+    state_schema=ShoppingState,  # Pass our custom state schema
+    checkpointer=checkpointer
+)
+
+print("Shopping agent created with custom state!")
