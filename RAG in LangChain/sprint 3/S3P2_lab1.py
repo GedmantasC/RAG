@@ -19,3 +19,6 @@ def search_products(query: str) -> str:
         "headphones": "AirPods Pro - $249",
         "tablet": "iPad Air - $599"
     }
+
+    results = [v for k, v in products.items() if query.lower() in k]
+    return "\n".join(results) if results else "No products found."
