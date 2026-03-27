@@ -1,7 +1,10 @@
-from langchain.agents import create_agent, AgentState
+from langgraph.prebuilt import create_react_agent
+from langgraph.graph import MessagesState
 from langchain_openai import ChatOpenAI
 from langchain.tools import tool
 from langgraph.checkpoint.memory import MemorySaver
+from typing import Annotated
+from langgraph.graph.message import add_messages
 
 # Step 1: Define custom state by extending AgentState
 class ShoppingState(AgentState):
