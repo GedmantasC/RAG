@@ -6,6 +6,7 @@ from langchain.tools import tool
 from langchain.agents import create_agent
 from langgraph.graph import MessagesState
 from langgraph.checkpoint.memory import MemorySaver
+from langchain.tools import ToolRuntime
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -36,6 +37,22 @@ def search_products(query: str) -> str:
     results = [v for k, v in products.items() if query.lower() in k]
     return "\n".join(results) if results else "No products found."
 
+@tool
+def check_budget(item_price: float, runtime: ToolRuntime) -> str:
+    """Check if an item fits within the remaining budget."""
+    # Read state via runtime.state
+    budget = runtime.state.get("budget", 0)
+    cart_items = runtime.state.get("cart_items", [])
+    
+    # Calculate total spent from actual item prices
+    spent = sum(item["price"] for item in cart_items)
+    remaining = budget - spent
+    
+    if item_price <= remaining:
+        return f"Yes, ${item_price} fits in your ${remaining:.2f} remaining budget."
+    else:
+        return f"No, only ${remaining:.2f} left in budget. ${item_price} exceeds this."
+
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
@@ -47,4 +64,4 @@ shopping_agent = create_agent(
     checkpointer=checkpointer
 )
 
-print("Shopping agent created with custom state!")
+print("Shopping agent created with custom state! -> The agent now has access to cart_items and budget in addition to messages")
