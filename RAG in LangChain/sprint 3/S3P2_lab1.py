@@ -13,6 +13,11 @@ os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
 if not os.environ.get("OPENAI_API_KEY"):
     os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
 
+#idea is that a custom state is like a message that goes through all converation and llm can remember it. 
+# in this case it is shoppingState - info about cart items and bugget
+#Without custom state, the agent would have to re-parse the entire conversation history every time to figure out what's in the cart.
+#  With custom state, it's structured data that any node in the graph can read or write directly — much more reliable and efficient.
+
 # Step 1: Define custom state (MessagesState already includes the required `messages` key)
 class ShoppingState(MessagesState):
     cart_items: list[dict]  # List of items: [{"name": "Laptop", "price": 1299}, ...]
