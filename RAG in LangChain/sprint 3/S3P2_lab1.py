@@ -88,3 +88,5 @@ shopping_agent_v2 = create_agent(
     state_schema=ShoppingState,
     checkpointer=checkpointer
 )
+
+print("Agent created with state-reading tools!")
