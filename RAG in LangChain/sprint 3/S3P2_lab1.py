@@ -52,6 +52,21 @@ def check_budget(item_price: float, runtime: ToolRuntime) -> str:
         return f"Yes, ${item_price} fits in your ${remaining:.2f} remaining budget."
     else:
         return f"No, only ${remaining:.2f} left in budget. ${item_price} exceeds this."
+    
+@tool
+def view_cart(runtime: ToolRuntime) -> str:
+    """View all items currently in the shopping cart."""
+    cart_items = runtime.state.get("cart_items", [])
+    budget = runtime.state.get("budget", 0)
+    
+    if not cart_items:
+        return "Your cart is empty."
+    
+    cart_display = "\n".join(f"- {item['name']} (${item['price']})" for item in cart_items)
+    spent = sum(item["price"] for item in cart_items)
+    remaining = budget - spent
+    
+    return f"Your Cart ({len(cart_items)} items):\n{cart_display}\n\nBudget: ${budget:.2f} | Spent: ${spent:.2f} | Remaining: ${remaining:.2f}"
 
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
@@ -65,3 +80,11 @@ shopping_agent = create_agent(
 )
 
 print("Shopping agent created with custom state! -> The agent now has access to cart_items and budget in addition to messages")
+
+# Create agent with state-reading tools
+shopping_agent_v2 = create_agent(
+    model=model,
+    tools=[search_products, check_budget, view_cart],
+    state_schema=ShoppingState,
+    checkpointer=checkpointer
+)
