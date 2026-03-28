@@ -1,13 +1,10 @@
 import os
 import toml
 import getpass
-from typing_extensions import TypedDict
-from typing import Annotated
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import BaseMessage
 from langchain.tools import tool
-from langgraph.prebuilt import create_react_agent
-from langgraph.graph.message import add_messages
+from langchain.agents import create_agent
+from langgraph.graph import MessagesState
 from langgraph.checkpoint.memory import MemorySaver
 
 # Load API key
@@ -16,9 +13,8 @@ os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
 if not os.environ.get("OPENAI_API_KEY"):
     os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
 
-# Step 1: Define custom state
-class ShoppingState(TypedDict):
-    messages: Annotated[list[BaseMessage], add_messages]
+# Step 1: Define custom state (MessagesState already includes the required `messages` key)
+class ShoppingState(MessagesState):
     cart_items: list[dict]  # List of items: [{"name": "Laptop", "price": 1299}, ...]
     budget: float            # User's budget
 
@@ -39,7 +35,7 @@ def search_products(query: str) -> str:
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
 
-shopping_agent = create_react_agent(
+shopping_agent = create_agent(
     model=model,
     tools=[search_products],
     state_schema=ShoppingState,
