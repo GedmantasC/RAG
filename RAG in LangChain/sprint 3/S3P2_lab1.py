@@ -89,4 +89,4 @@ shopping_agent_v2 = create_agent(
     checkpointer=checkpointer
 )
 
-print("Agent created with state-reading tools!")
+print("Agent created with state-reading tools! -> this means that now agent now knows how to reasd it")
