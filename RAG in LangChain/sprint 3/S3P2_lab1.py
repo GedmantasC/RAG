@@ -103,3 +103,6 @@ initial_state = {
         {"name": "Mouse", "price": 29}
     ]
 }
+
+result = shopping_agent_v2.invoke(initial_state, config=config)
+print(result["messages"][-1].content)
