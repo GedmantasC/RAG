@@ -90,3 +90,6 @@ shopping_agent_v2 = create_agent(
 )
 
 print("Agent created with state-reading tools! -> this means that now agent now knows how to reasd it")
+
+# Test the state-reading tools
+config = {"configurable": {"thread_id": "test-shopping-1"}}
