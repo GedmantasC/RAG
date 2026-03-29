@@ -93,3 +93,13 @@ print("Agent created with state-reading tools! -> this means that now agent now 
 
 # Test the state-reading tools
 config = {"configurable": {"thread_id": "test-shopping-1"}}
+
+# Initialize state with some budget
+initial_state = {
+    "messages": [{"role": "user", "content": "What's in my cart?"}],
+    "budget": 2000.0,
+    "cart_items": [
+        {"name": "MacBook Pro", "price": 1299},
+        {"name": "Mouse", "price": 29}
+    ]
+}
