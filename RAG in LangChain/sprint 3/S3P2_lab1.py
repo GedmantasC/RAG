@@ -70,6 +70,12 @@ def view_cart(runtime: ToolRuntime) -> str:
     
     return f"Your Cart ({len(cart_items)} items):\n{cart_display}\n\nBudget: ${budget:.2f} | Spent: ${spent:.2f} | Remaining: ${remaining:.2f}"
 
+@tool
+def add_to_cart(item_name: str, item_price: float, runtime: ToolRuntime) -> Command:
+    """Add an item to the shopping cart with its price."""
+    # Read current cart
+    current_cart = runtime.state.get("cart_items", [])
+
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
