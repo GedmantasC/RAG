@@ -76,6 +76,9 @@ def add_to_cart(item_name: str, item_price: float, runtime: ToolRuntime) -> Comm
     # Read current cart
     current_cart = runtime.state.get("cart_items", [])
 
+    # Create new item
+    new_item = {"name": item_name, "price": item_price}
+
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
