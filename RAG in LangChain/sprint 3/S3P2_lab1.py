@@ -69,7 +69,7 @@ def view_cart(runtime: ToolRuntime) -> str:
     remaining = budget - spent
     
     return f"Your Cart ({len(cart_items)} items):\n{cart_display}\n\nBudget: ${budget:.2f} | Spent: ${spent:.2f} | Remaining: ${remaining:.2f}"
-
+#new tool to adjust custom state
 @tool
 def add_to_cart(item_name: str, item_price: float, runtime: ToolRuntime) -> Command:
     """Add an item to the shopping cart with its price."""
