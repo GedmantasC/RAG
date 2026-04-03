@@ -103,6 +103,18 @@ def remove_from_cart(item_name: str, runtime: ToolRuntime) -> Command:
     # Check if item exists
     item_exists = any(item["name"] == item_name for item in current_cart)
 
+    if not item_exists:
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        content=f"'{item_name}' is not in your cart.",
+                        tool_call_id=runtime.tool_call_id
+                    )
+                ]
+            }
+        )
+
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
