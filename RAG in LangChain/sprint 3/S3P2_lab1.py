@@ -124,6 +124,28 @@ def remove_from_cart(item_name: str, runtime: ToolRuntime) -> Command:
         else:
             updated_cart.append(item)
 
+        return Command(
+        update={
+            "cart_items": updated_cart,
+            "messages": [
+                ToolMessage(
+                    content=f"Removed '{item_name}' from cart. {len(updated_cart)} items remaining.",
+                    tool_call_id=runtime.tool_call_id
+                )
+            ]
+        }
+    )
+
+    # Create final agent with all tools
+    full_shopping_agent = create_agent(
+        model=model,
+        tools=[search_products, check_budget, view_cart, add_to_cart, remove_from_cart],
+        state_schema=ShoppingState,
+        checkpointer=checkpointer
+    )
+
+    print("Full shopping agent created with state read/write!")
+
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
