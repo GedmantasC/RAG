@@ -95,6 +95,11 @@ def add_to_cart(item_name: str, item_price: float, runtime: ToolRuntime) -> Comm
         }
     )
 
+@tool
+def remove_from_cart(item_name: str, runtime: ToolRuntime) -> Command:
+    """Remove an item from the shopping cart."""
+    current_cart = runtime.state.get("cart_items", [])
+
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
 checkpointer = MemorySaver()
