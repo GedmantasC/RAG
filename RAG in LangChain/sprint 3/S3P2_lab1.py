@@ -114,6 +114,15 @@ def remove_from_cart(item_name: str, runtime: ToolRuntime) -> Command:
                 ]
             }
         )
+    
+    # Remove item (removes first occurrence)
+    updated_cart = []
+    removed = False
+    for item in current_cart:
+        if item["name"] == item_name and not removed:
+            removed = True
+        else:
+            updated_cart.append(item)
 
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
