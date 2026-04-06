@@ -184,3 +184,6 @@ initial_state = {
 
 result = shopping_agent_v2.invoke(initial_state, config=config)
 print(result["messages"][-1].content)
+
+# Test the full agent with state updates
+config = {"configurable": {"thread_id": "shopping-demo-1"}}
