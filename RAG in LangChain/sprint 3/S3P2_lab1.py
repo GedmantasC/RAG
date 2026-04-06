@@ -190,3 +190,12 @@ print(result["messages"][-1].content)
 # Test the full agent with state updates
 config = {"configurable": {"thread_id": "shopping-demo-1"}}
 
+def chat(message: str):
+    """Helper function to chat with the agent."""
+    result = full_shopping_agent.invoke(
+        {"messages": [{"role": "user", "content": message}]},
+        config=config
+    )
+    response = result['messages'][-1].content
+    print(f"\nAgent: {response}\n")
+    return result
