@@ -199,3 +199,11 @@ def chat(message: str):
     response = result['messages'][-1].content
     print(f"\nAgent: {response}\n")
     return result
+
+# Initialize with budget
+initial_state = {
+    "messages": [{"role": "user", "content": "Hi! I have a $2000 budget for shopping."}],
+    "budget": 2000.0,
+    "cart_items": []
+}
+full_shopping_agent.invoke(initial_state, config=config)
