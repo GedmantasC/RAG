@@ -136,15 +136,7 @@ def remove_from_cart(item_name: str, runtime: ToolRuntime) -> Command:
         }
     )
 
-    # Create final agent with all tools
-    full_shopping_agent = create_agent(
-        model=model,
-        tools=[search_products, check_budget, view_cart, add_to_cart, remove_from_cart],
-        state_schema=ShoppingState,
-        checkpointer=checkpointer
-    )
 
-    print("Full shopping agent created with state read/write!")
 
 # Step 3: Create agent with custom state
 model = ChatOpenAI(model="gpt-4o")
@@ -169,6 +161,16 @@ shopping_agent_v2 = create_agent(
 
 print("Agent created with state-reading tools! -> this means that now agent now knows how to reasd it")
 
+# Create final agent with all tools
+full_shopping_agent = create_agent(
+    model=model,
+    tools=[search_products, check_budget, view_cart, add_to_cart, remove_from_cart],
+    state_schema=ShoppingState,
+    checkpointer=checkpointer
+    )
+
+print("Full shopping agent created with state read/write!")
+
 # Test the state-reading tools
 config = {"configurable": {"thread_id": "test-shopping-1"}}
 
@@ -187,3 +189,4 @@ print(result["messages"][-1].content)
 
 # Test the full agent with state updates
 config = {"configurable": {"thread_id": "shopping-demo-1"}}
+
