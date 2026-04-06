@@ -207,3 +207,24 @@ initial_state = {
     "cart_items": []
 }
 full_shopping_agent.invoke(initial_state, config=config)
+
+print("=" * 60)
+print("Shopping Assistant Demo")
+print("=" * 60)
+print("Try commands like:")
+print("  - 'Search for laptops'")
+print("  - 'Add a laptop to my cart for $1299'")
+print("  - 'Can I afford headphones for $249?'")
+print("  - 'Show me my cart'")
+print("  - 'Remove the laptop'")
+print("Type 'quit' to exit.")
+print("=" * 60)
+
+# Interactive loop
+while True:
+    user_input = input("\nYou: ")
+    if user_input.lower() in ['quit', 'exit', 'q']:
+        print("Goodbye!")
+        break
+    if user_input.strip():
+        chat(user_input)
