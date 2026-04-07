@@ -230,3 +230,4 @@ while True:
         chat(user_input)
 
 #the idea is that you have some info that goes through all conversation like chart info
+#during the time you can also do some modifications for it, like buying the stuff
