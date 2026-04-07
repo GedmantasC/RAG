@@ -228,3 +228,5 @@ while True:
         break
     if user_input.strip():
         chat(user_input)
+
+#the idea is that you have some info that goes through all conversation like chart info
