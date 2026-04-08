@@ -11,6 +11,7 @@ from langgraph.types import Command
 from langchain_core.messages import ToolMessage
 from langchain.agents import AgentState
 from typing import List, Dict, Any
+from langchain.tools import tool, ToolRuntime
 
 # Load API key
 secrets = toml.load(".key/secrets.toml")
@@ -23,11 +24,28 @@ if not os.environ.get("OPENAI_API_KEY"):
 
 
 class TaskState(AgentState):
-    id: int  #task id
-    title: str      #title of the task
-    completed:bool  #completion status
-    pass
+    tasks: List[Dict[str, Any]] = []  # List of tasks
+    next_task_id: int = 1              # Next task ID to assign
 
 # Test your state schema
 print("TaskState defined!")
 print(f"Fields: {TaskState.__annotations__}")
+
+
+@tool
+def list_tasks(runtime: ToolRuntime) -> str:
+    """List all tasks with their completion status."""
+    tasks = runtime.state.get("tasks", [])
+    
+    if not tasks:
+        return "No tasks found."
+    
+    task_lines = []
+    for task in tasks:
+        status = "[X]" if task["completed"] else "[ ]"
+        task_lines.append(f"{status} [{task['id']}] {task['title']}")
+    
+    task_display = "\n".join(task_lines)
+    return f"Your Tasks ({len(tasks)} total):\n{task_display}"
+
+print("list_tasks tool created!")
