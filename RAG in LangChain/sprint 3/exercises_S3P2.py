@@ -15,3 +15,10 @@ secrets = toml.load(".key/secrets.toml")
 os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
 if not os.environ.get("OPENAI_API_KEY"):
     os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
+
+class TaskState (MessagesState):
+    id: int  #task id
+    title: str      #title of the task
+    completed:bool  #completion status
+
+    
