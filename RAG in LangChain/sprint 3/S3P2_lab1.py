@@ -232,3 +232,11 @@ while True:
 #the idea is that you have some info that goes through all conversation like chart info
 #during the time you can also do some modifications for it, like buying the stuff
 #and for llm this personal info is not shown, so it's save to provide it
+
+# Continue the same conversation (same thread_id)
+print("\n" + "=" * 60)
+print("Continuing the same conversation...")
+print("=" * 60)
+print("Notice how the agent remembers everything from before!")
+print("Type 'quit' to exit.")
+print("=" * 60)
