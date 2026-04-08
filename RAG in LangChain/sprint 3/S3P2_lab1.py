@@ -240,3 +240,12 @@ print("=" * 60)
 print("Notice how the agent remembers everything from before!")
 print("Type 'quit' to exit.")
 print("=" * 60)
+
+# Interactive loop continues with same thread
+while True:
+    user_input = input("\nYou: ")
+    if user_input.lower() in ['quit', 'exit', 'q']:
+        print("Goodbye!")
+        break
+    if user_input.strip():
+        chat(user_input)
