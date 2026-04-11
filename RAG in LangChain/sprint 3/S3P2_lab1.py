@@ -234,6 +234,7 @@ while True:
 #and for llm this personal info is not shown, so it's save to provide it
 
 # Continue the same conversation (same thread_id)
+#idea is that to have a new chat but same conversation
 print("\n" + "=" * 60)
 print("Continuing the same conversation...")
 print("=" * 60)
@@ -249,3 +250,4 @@ while True:
         break
     if user_input.strip():
         chat(user_input)
+    
