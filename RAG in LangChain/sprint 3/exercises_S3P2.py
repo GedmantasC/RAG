@@ -31,7 +31,7 @@ class TaskState(AgentState):
 print("TaskState defined!")
 print(f"Fields: {TaskState.__annotations__}")
 
-
+#takes the agentState that means taking info that goes in all conversation
 @tool
 def list_tasks(runtime: ToolRuntime) -> str:
     """List all tasks with their completion status."""
