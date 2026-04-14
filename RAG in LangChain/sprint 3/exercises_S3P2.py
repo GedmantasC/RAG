@@ -62,3 +62,6 @@ def list_tasks(runtime: ToolRuntime) -> str:
     for task in tasks:
         status = "[X]" if task["completed"] else "[ ]"
         task_lines.append(f"{status} [{task['id']}] {task['title']}")
+
+        task_display = "\n".join(task_lines)
+    return f"Your Tasks ({len(tasks)} total):\n{task_display}"
