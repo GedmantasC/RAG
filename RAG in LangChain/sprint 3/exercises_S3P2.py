@@ -57,3 +57,8 @@ def list_tasks(runtime: ToolRuntime) -> str:
 
     if not tasks:
         return "No tasks found."
+    
+    task_lines = []
+    for task in tasks:
+        status = "[X]" if task["completed"] else "[ ]"
+        task_lines.append(f"{status} [{task['id']}] {task['title']}")
