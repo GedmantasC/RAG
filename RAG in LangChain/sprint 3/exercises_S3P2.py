@@ -49,3 +49,11 @@ def list_tasks(runtime: ToolRuntime) -> str:
     return f"Your Tasks ({len(tasks)} total):\n{task_display}"
 
 print("list_tasks tool created!")
+
+@tool
+def list_tasks(runtime: ToolRuntime) -> str:
+    """List all tasks with their completion status."""
+    tasks = runtime.state.get("tasks", [])
+
+    if not tasks:
+        return "No tasks found."
