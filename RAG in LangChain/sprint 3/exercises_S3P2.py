@@ -50,6 +50,7 @@ def list_tasks(runtime: ToolRuntime) -> str:
 
 print("list_tasks tool created!")
 
+#this lists_all tasks from the list
 @tool
 def list_tasks(runtime: ToolRuntime) -> str:
     """List all tasks with their completion status."""
