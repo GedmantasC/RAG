@@ -66,3 +66,8 @@ def list_tasks(runtime: ToolRuntime) -> str:
 
         task_display = "\n".join(task_lines)
     return f"Your Tasks ({len(tasks)} total):\n{task_display}"
+
+@tool
+def create_task(title: str, runtime: ToolRuntime) -> Command:
+    """Create a new task."""
+    # Get current state
