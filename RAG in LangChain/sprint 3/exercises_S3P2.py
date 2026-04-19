@@ -80,3 +80,6 @@ def create_task(title: str, runtime: ToolRuntime) -> Command:
         "title": title,
         "completed": False
     }
+
+     # Update task list
+    updated_tasks = current_tasks + [new_task]
