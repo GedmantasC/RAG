@@ -83,3 +83,17 @@ def create_task(title: str, runtime: ToolRuntime) -> Command:
 
      # Update task list
     updated_tasks = current_tasks + [new_task]
+
+    # Return Command to update state
+    return Command(
+        update={
+            "tasks": updated_tasks,
+            "next_task_id": next_id + 1,
+            "messages": [
+                ToolMessage(
+                    content=f"Created task [{next_id}]: {title}",
+                    tool_call_id=runtime.tool_call_id
+                )
+            ]
+        }
+    )
