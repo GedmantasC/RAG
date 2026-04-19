@@ -73,3 +73,10 @@ def create_task(title: str, runtime: ToolRuntime) -> Command:
     # Get current state
     current_tasks = runtime.state.get("tasks", [])
     next_id = runtime.state.get("next_task_id", 1)
+
+        # Create new task
+    new_task = {
+        "id": next_id,
+        "title": title,
+        "completed": False
+    }
