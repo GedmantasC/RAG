@@ -104,3 +104,19 @@ def complete_task(task_id: int, runtime: ToolRuntime) -> Command:
                 updated_task = task.copy()
                 updated_task["completed"] = True
                 updated_tasks.append(updated_task)
+
+        else:
+                updated_tasks.append(task)
+
+    # Handle error cases
+    if not task_found:
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        content=f"Task [{task_id}] not found.",
+                        tool_call_id=runtime.tool_call_id
+                    )
+                ]
+            }
+        )
