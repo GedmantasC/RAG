@@ -120,3 +120,27 @@ def complete_task(task_id: int, runtime: ToolRuntime) -> Command:
                 ]
             }
         )
+    if already_completed:
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        content=f"Task [{task_id}] is already completed.",
+                        tool_call_id=runtime.tool_call_id
+                    )
+                ]
+            }
+        )
+    
+    # Success case
+    return Command(
+        update={
+            "tasks": updated_tasks,
+            "messages": [
+                ToolMessage(
+                    content=f"Marked task [{task_id}] as completed!",
+                    tool_call_id=runtime.tool_call_id
+                )
+            ]
+        }
+    )
