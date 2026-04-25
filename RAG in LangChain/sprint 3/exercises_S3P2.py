@@ -88,3 +88,19 @@ def create_task(title: str, runtime: ToolRuntime) -> Command:
 def complete_task(task_id: int, runtime: ToolRuntime) -> Command:
     """Mark a task as completed."""
     current_tasks = runtime.state.get("tasks", [])
+    # Find the task
+    task_found = False
+    already_completed = False
+    updated_tasks = []
+    
+    for task in current_tasks:
+        if task["id"] == task_id:
+            task_found = True
+            if task["completed"]:
+                already_completed = True
+                updated_tasks.append(task)
+            else:
+                # Mark as completed
+                updated_task = task.copy()
+                updated_task["completed"] = True
+                updated_tasks.append(updated_task)
