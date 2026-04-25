@@ -83,3 +83,8 @@ def create_task(title: str, runtime: ToolRuntime) -> Command:
             ]
         }
     )
+
+@tool
+def complete_task(task_id: int, runtime: ToolRuntime) -> Command:
+    """Mark a task as completed."""
+    current_tasks = runtime.state.get("tasks", [])
