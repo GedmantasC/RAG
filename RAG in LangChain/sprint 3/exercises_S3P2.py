@@ -154,3 +154,6 @@ task_agent = create_agent(
     state_schema=TaskState,
     checkpointer=checkpointer
 )
+
+# Test it
+config = {"configurable": {"thread_id": "task-demo-1"}}
