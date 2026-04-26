@@ -165,3 +165,7 @@ def chat_task(message: str):
     )
     print(f"\nAgent: {result['messages'][-1].content}\n")
     return result
+
+print("=" * 60)
+print("Task Management Agent Demo")
+print("=" * 60)
