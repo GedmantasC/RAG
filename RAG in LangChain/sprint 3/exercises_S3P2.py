@@ -169,3 +169,10 @@ def chat_task(message: str):
 print("=" * 60)
 print("Task Management Agent Demo")
 print("=" * 60)
+
+chat_task("Create a task: Buy groceries")
+chat_task("Create a task: Write report")
+chat_task("Create a task: Call dentist")
+chat_task("Show me all my tasks")
+chat_task("Mark task 2 as complete")
+chat_task("List my tasks again")
