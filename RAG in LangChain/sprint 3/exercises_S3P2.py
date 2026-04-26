@@ -157,3 +157,11 @@ task_agent = create_agent(
 
 # Test it
 config = {"configurable": {"thread_id": "task-demo-1"}}
+
+def chat_task(message: str):
+    result = task_agent.invoke(
+        {"messages": [{"role": "user", "content": message}]},
+        config=config
+    )
+    print(f"\nAgent: {result['messages'][-1].content}\n")
+    return result
