@@ -144,3 +144,13 @@ def complete_task(task_id: int, runtime: ToolRuntime) -> Command:
             ]
         }
     )
+
+model = ChatOpenAI(model="gpt-4o-mini")
+checkpointer = MemorySaver()
+
+task_agent = create_agent(
+    model=model,
+    tools=[list_tasks, create_task, complete_task],
+    state_schema=TaskState,
+    checkpointer=checkpointer
+)
