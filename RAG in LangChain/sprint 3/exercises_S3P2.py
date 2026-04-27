@@ -181,3 +181,17 @@ chat_task("List my tasks again")
 def delete_task(task_id: int, runtime: ToolRuntime) -> Command:
     """Delete a task from the list."""
     current_tasks = runtime.state.get("tasks", [])
+    # Check if task exists
+    task_exists = any(task["id"] == task_id for task in current_tasks)
+    
+    if not task_exists:
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        content=f"Task [{task_id}] not found.",
+                        tool_call_id=runtime.tool_call_id
+                    )
+                ]
+            }
+        )
