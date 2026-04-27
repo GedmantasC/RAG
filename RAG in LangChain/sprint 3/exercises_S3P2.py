@@ -176,3 +176,8 @@ chat_task("Create a task: Call dentist")
 chat_task("Show me all my tasks")
 chat_task("Mark task 2 as complete")
 chat_task("List my tasks again")
+
+@tool
+def delete_task(task_id: int, runtime: ToolRuntime) -> Command:
+    """Delete a task from the list."""
+    current_tasks = runtime.state.get("tasks", [])
