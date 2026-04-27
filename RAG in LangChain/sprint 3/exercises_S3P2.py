@@ -195,3 +195,5 @@ def delete_task(task_id: int, runtime: ToolRuntime) -> Command:
                 ]
             }
         )
+    # Remove the task
+    updated_tasks = [task for task in current_tasks if task["id"] != task_id]
