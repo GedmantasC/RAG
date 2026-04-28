@@ -22,6 +22,7 @@ This repo focuses on hands-on exploration of core RAG concepts, including:
 - External API usage
 - LLM for tools evaluation
 - Custom State
+- Middleware
 
 
 
