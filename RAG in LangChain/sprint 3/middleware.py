@@ -8,6 +8,7 @@ class InputValidationMiddleware(AgentMiddleware):
             return {"messages": messages[-20:]}
             return None  # No changes
 
+#part to create agent
 agent = create_agent(
     model="gpt-4o-mini",
     tools=[search, calculate],
