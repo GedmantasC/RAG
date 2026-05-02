@@ -23,6 +23,7 @@ This repo focuses on hands-on exploration of core RAG concepts, including:
 - LLM for tools evaluation
 - Custom State
 - Middleware
+- MangoDB
 
 
 
