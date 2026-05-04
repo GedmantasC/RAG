@@ -16,3 +16,14 @@ agent = create_agent(
     tools=[search, calculate],
     middleware=[InputValidationMiddleware()]
 )
+
+@wrap_tool_call
+def authorize_tools(request, handler):
+    """Only allow certain tools based on user tier."""
+    tool_name = request.tool_call["name"]
+
+    # Imagine we have user tier in context
+    # user_tier = request.runtime.context.tier
+
+    # For demo, we'll block "expensive" tools
+    expensive_tools = ["web_scrape_full_site", "train_model"]
