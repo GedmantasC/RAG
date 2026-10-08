@@ -3,7 +3,7 @@
 This repository contains practical experiments and small projects for learning Retrieval-Augmented Generation (RAG).
 
 The goal of this repo is to understand RAG from the ground up — starting with embeddings and vector similarity, and gradually building toward full retrieval pipelines.
-
+This is for learning purposes
 ---
 
 ## What’s inside
